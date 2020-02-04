@@ -14,5 +14,20 @@
   <body>
     <h1>My React App</h1>
     <div id="root"></div>
+    <script type="text/babel">
+      const { useEffect, useState } = React;
+
+      class App extends React.Component {
+        render() {
+          return (
+            <div>
+              <h1>Chicken</h1>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<App />, document.querySelector('#root'));
+    </script>
   </body>
 </html>
