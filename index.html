@@ -21,20 +21,33 @@
         let [users, setUsers] = useState([]);
 
         useEffect(() => {
-          axios.get("./api/users").then(response => {
+          axios.get('./api/users').then(response => {
             console.log(response.data);
             setUsers(response.data);
           });
         }, []);
 
+        function handleSubmit(e) {
+          e.preventDefault();
+          const val = e.target.elements[0].value;
+          //prettier-ignore
+          axios.post('/api/users', { "name": val }).then(response => {
+            console.log(response);
+          });
+        }
+
         return (
           <div>
             <h1>Chicken</h1>
+            <form onSubmit={handleSubmit}>
+              <input type="text" placeholder="Name" id="Name" name="Name" />
+              <input type="submit" />
+            </form>
             <ul>
               {users.map(user => {
                 return (
                   <li key={user.id}>
-                    {user.name} id : {user.id}{" "}
+                    {user.name} id : {user.id}{' '}
                   </li>
                 );
               })}
@@ -43,7 +56,7 @@
         );
       }
 
-      ReactDOM.render(<App />, document.querySelector("#root"));
+      ReactDOM.render(<App />, document.querySelector('#root'));
     </script>
   </body>
 </html>
