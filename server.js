@@ -1,6 +1,6 @@
 // console.log("hello!");
-const http = require('http');
-const fs = require('fs');
+const http = require("http");
+const fs = require("fs");
 
 const readFile = file => {
   return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ const writeFile = (file, data) => {
 };
 
 const addGuest = guest => {
-  return readFile('./guests.json')
+  return readFile("./guests.json")
     .then(data => {
       const guests = JSON.parse(data);
       let max = guests.reduce((acc, guest) => {
@@ -38,7 +38,7 @@ const addGuest = guest => {
       }, 0);
       guest.id = max + 1;
       guests.push(guest);
-      return writeFile('./guests.json', JSON.stringify(guests, null, 2));
+      return writeFile("./guests.json", JSON.stringify(guests, null, 2));
     })
     .then(() => {
       return guest;
@@ -47,20 +47,27 @@ const addGuest = guest => {
 
 http
   .createServer((req, res) => {
-    if (req.url === '/') {
-      readFile('./index.html').then(html => {
+    if (req.url === "/") {
+      readFile("./index.html").then(html => {
         res.write(html);
         res.end();
       });
-    } else if (req.url === '/api/users') {
-      readFile('./guests.json').then(data => {
+    } else if (req.url === "/api/users") {
+      readFile("./guests.json").then(data => {
         // console.log(data);
         res.write(data);
         res.end();
       });
-    } else {
-      res.write('fail');
-      res.end();
+    } else if (req.url === "/api/guests" && req.method === "POST") {
+      let buffer = "";
+      req.on("data", chunk => {
+        buffer += chunk;
+      });
+      req.on("end", () => {
+        //your code here
+        //the buffer will be the data sent to the server on POST request to /api/guests
+        console.log(buffer);
+      });
     }
   })
   .listen(3000);
